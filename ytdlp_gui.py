@@ -9,6 +9,8 @@ import re
 from pathlib import Path
 from datetime import datetime
 
+GUI_VERSION = "v1.0.1"
+
 # --- パス設定 ---
 # PyInstaller でビルドした単体EXEでは __file__ が一時展開先を指すため、
 # sys.frozen が True のときは sys.executable (EXE自身) の親を使う
@@ -247,16 +249,18 @@ class YtdlpGUI(tk.Tk):
     # バージョン確認
     # ──────────────────────────────────────────────
     def _check_version(self):
+        # GUI バージョンのみ表示
+        self.ver_label.config(text=f"GUI {GUI_VERSION}")
+
+        # yt-dlp の存在確認はバックグラウンドで行うが、表示は更新しない
         def run():
             try:
-                result = subprocess.run(
+                subprocess.run(
                     [str(YTDLP_EXE), "--version"],
                     capture_output=True, text=True, encoding="utf-8"
                 )
-                ver = result.stdout.strip()
-                self.after(0, lambda: self.ver_label.config(text=f"yt-dlp {ver}"))
             except Exception:
-                self.after(0, lambda: self.ver_label.config(text="yt-dlp (version unknown)"))
+                pass
         threading.Thread(target=run, daemon=True).start()
 
     # ──────────────────────────────────────────────
@@ -374,6 +378,9 @@ class YtdlpGUI(tk.Tk):
             assert proc.stdout is not None
 
             for line in proc.stdout:
+                # ユーザーによる停止を検知してループ脱出
+                if not self.is_downloading:
+                    break
                 line = line.rstrip("\n")
                 if not line:
                     continue
@@ -417,9 +424,18 @@ class YtdlpGUI(tk.Tk):
         self.download_queue.clear()
         if self.current_process:
             try:
-                self.current_process.terminate()
-            except Exception:
-                pass
+                # Windows では terminate() だけでは子プロセス(ffmpeg等)が残る場合があるため、
+                # taskkill /F /T でプロセスツリー全体を強制終了させる。
+                if os.name == "nt":
+                    subprocess.run(
+                        ["taskkill", "/F", "/T", "/PID", str(self.current_process.pid)],
+                        capture_output=True,
+                        creationflags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess, "CREATE_NO_WINDOW") else 0
+                    )
+                else:
+                    self.current_process.terminate()
+            except Exception as e:
+                self._log(f"ログ：停止処理中にエラーが発生しました: {e}\n", "error")
         self._log("\n⚠ ダウンロードを停止しました\n", "warn")
         self._set_ui_downloading(False)
         self.progress_label.config(text="停止")
