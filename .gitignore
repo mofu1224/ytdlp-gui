@@ -2,20 +2,39 @@
 # PyInstaller などによって生成されるフォルダ
 build/
 dist/
+*.pyc
 __pycache__/
-*.spec
+*.egg-info/
+.eggs/
+
+# --- Python 仮想環境 ---
+venv/
+env/
+ENV/
+.venv
+.venv/
 
 # --- 外部バイナリ・実行ファイル ---
 # 外部から取得可能なツール本体はリポジトリに含めないのが一般的です
 yt-dlp.exe
 
-# --- OS・エディタ関連 ---
-# システムが自動作成する不要なファイル
-.DS_Store
-Thumbs.db
+# --- IDE・エディタ関連 ---
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.project
+.pydevproject
+.settings/
+*.sublime-workspace
+.env
 
-# --- ログファイル ---
-# 実行時のデバッグログなど
+# --- ログ・キャッシュファイル ---
 *.log
+.pytest_cache/
+.coverage
+htmlcov/
+dist_info/
