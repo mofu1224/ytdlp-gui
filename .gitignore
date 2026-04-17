@@ -37,3 +37,5 @@ Thumbs.db
 .coverage
 htmlcov/
 dist_info/
+
+# --- その他 ---
