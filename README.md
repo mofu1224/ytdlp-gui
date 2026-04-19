@@ -77,9 +77,8 @@ start_gui.bat
 
 本プロジェクトは MIT License のもとで公開されています。
 
-本配布物には yt-dlp が含まれています。
-yt-dlp は Unlicense のもとでライセンスされています。
-そのライセンス全文は `yt-dlp_LICENSE.txt` として同梱されています。
+本リポジトリには yt-dlp 本体（`yt-dlp.exe`）は同梱しません。必要に応じて公式の配布物から入手してください。
+yt-dlp は Unlicense のもとでライセンスされています。詳細は yt-dlp のリポジトリ／配布物をご確認ください。
 
 ### 法的注意事項
 
@@ -166,9 +165,9 @@ Thumbnails are automatically embedded into supported formats (mp4, mp3, etc.).
 
 This project is released under the MIT License.
 
-This distribution includes yt-dlp.  
+This repository does not bundle yt-dlp itself.  
 yt-dlp is licensed under the Unlicense.  
-The full license text is included as `yt-dlp_LICENSE.txt`.
+See the upstream project/distribution for the full license text.
 
 ### Legal Notice
 

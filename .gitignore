@@ -2,10 +2,15 @@
 # PyInstaller などによって生成されるフォルダ
 build/
 dist/
+DownloadData/
 *.pyc
 __pycache__/
 *.egg-info/
+*.dist-info/
 .eggs/
+.mypy_cache/
+.pyright/
+.ruff_cache/
 
 # --- Python 仮想環境 ---
 venv/
@@ -33,7 +38,8 @@ Thumbs.db
 
 # --- ログ・キャッシュファイル ---
 *.log
+.tmp/
+.piptmp/
 .pytest_cache/
 .coverage
 htmlcov/
-dist_info/
